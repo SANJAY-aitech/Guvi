@@ -20,19 +20,23 @@ def predict_voice(features: dict):
     x = scaler.transform(x)
 
     # Predict probability
-    prob = model.predict_proba(x)[0][1]
+    prob = float(model.predict_proba(x)[0][1])
 
-    explanation = generate_explanation(features)
+    # Decide prediction label FIRST
+    prediction = "AI_GENERATED" if prob >= 0.5 else "HUMAN"
 
-    if prob >= 0.5:
+    # Generate explanation WITH prediction
+    explanation = generate_explanation(features, prediction)
+
+    if prediction == "AI_GENERATED":
         return {
             "classification": "AI_GENERATED",
-            "confidenceScore": round(float(prob), 2),
+            "confidenceScore": round(prob, 2),
             "explanation": explanation
         }
     else:
         return {
             "classification": "HUMAN",
-            "confidenceScore": round(float(1 - prob), 2),
+            "confidenceScore": round(1 - prob, 2),
             "explanation": explanation
         }
