@@ -1,6 +1,6 @@
 import numpy as np
 import joblib
-from app.explanation import generate_explanation
+
 
 # Load once at startup (IMPORTANT)
 model = joblib.load("voice_model.joblib")
@@ -25,18 +25,15 @@ def predict_voice(features: dict):
     # Decide prediction label FIRST
     prediction = "AI_GENERATED" if prob >= 0.5 else "HUMAN"
 
-    # Generate explanation WITH prediction
-    explanation = generate_explanation(features, prediction)
+
 
     if prediction == "AI_GENERATED":
         return {
             "classification": "AI_GENERATED",
-            "confidenceScore": round(prob, 2),
-            "explanation": explanation
+            "confidenceScore": round(prob, 2)
         }
     else:
         return {
             "classification": "HUMAN",
-            "confidenceScore": round(1 - prob, 2),
-            "explanation": explanation
+            "confidenceScore": round(1 - prob, 2)
         }
