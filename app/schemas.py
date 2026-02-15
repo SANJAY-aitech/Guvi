@@ -7,7 +7,6 @@ class VoiceDetectionRequest(BaseModel):
 
 class VoiceDetectionResponse(BaseModel):
     status: str
-    language: str
     classification: str
     confidenceScore: float
-    explanation: str
+
